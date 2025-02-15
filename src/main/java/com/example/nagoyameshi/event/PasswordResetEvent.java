@@ -6,7 +6,7 @@ import com.example.nagoyameshi.entity.User;
 
 import lombok.Getter;
 
-//パスワード変更の機能
+// パスワード再設定の追加
 @Getter
 public class PasswordResetEvent extends ApplicationEvent {
 	private User user;

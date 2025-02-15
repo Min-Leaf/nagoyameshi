@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import lombok.Data;
 
+// パスワード変更機能の追加
 @Data
 public class SendEmailInputForm {
 	@NotBlank(message = "メールアドレスを入力してください。")

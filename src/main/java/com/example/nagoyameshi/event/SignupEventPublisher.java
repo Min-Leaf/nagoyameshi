@@ -14,11 +14,12 @@ public class SignupEventPublisher {
        this.applicationEventPublisher = applicationEventPublisher;
    }
 
+ //サインアップイベント発行
    public void publishSignupEvent(User user, String requestUrl) {
        applicationEventPublisher.publishEvent(new SignupEvent(this, user, requestUrl));
    }
 
-   // パスワード変更の機能
+   // パスワード再設定の追加
 	public void publishPasswordResetEvent(User user, String requestUrl) {
 		applicationEventPublisher.publishEvent(new PasswordResetEvent(this, user, requestUrl));
 	}

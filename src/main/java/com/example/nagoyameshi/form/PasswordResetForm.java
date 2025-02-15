@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import lombok.Data;
 
-// パスワード変更の機能
+// パスワード変更機能の追加
 @Data
 public class PasswordResetForm {
 	@NotNull
@@ -19,25 +19,4 @@ public class PasswordResetForm {
 	
 	@NotBlank(message = "パスワード（確認用）を入力してください。")
 	private String passwordConfirmation; 
-	
-    // Getter, Setter
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPasswordConfirmation() {
-        return passwordConfirmation;
-    }
-
-    public void setPasswordConfirmation(String passwordConfirmation) {
-        this.passwordConfirmation = passwordConfirmation;
-    }
-
-	public String getEmail() {
-		return passwordConfirmation;
-	}
 }

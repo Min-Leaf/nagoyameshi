@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.nagoyameshi.entity.User;
-import com.example.nagoyameshi.form.PasswordResetForm;
 import com.example.nagoyameshi.form.UserEditForm;
 import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.UserService;
@@ -87,38 +86,4 @@ public class UserController {
 
 		return "redirect:/user";
 	}
-	
-	// パスワード編集フォームを表示
-    @GetMapping("/edit-password")
-    public String editPassword(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
-    	PasswordResetForm userEditPasswordForm = new PasswordResetForm();
-        model.addAttribute("userEditPasswordForm", userEditPasswordForm);
-        return "user/edit_password";  // ここで表示するビューの名前を指定
-    }
-
-    // パスワード更新処理
-    @PostMapping("/update-password")
-    public String changePassword(@ModelAttribute @Validated PasswordResetForm userEditPasswordForm,
-            BindingResult bindingResult, 
-            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl, 
-            RedirectAttributes redirectAttributes) {
-
-        // パスワード確認一致チェック
-        if (!userEditPasswordForm.getPassword().equals(userEditPasswordForm.getPasswordConfirmation())) {
-            bindingResult.rejectValue("passwordConfirmation", "error.passwordConfirmation", "パスワード確認が一致しません。");
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "user/edit_password";  // エラーがあれば編集フォームに戻す
-        }
-
-        // ユーザー情報を取得し、パスワードを更新
-        User user = userDetailsImpl.getUser();
-        user.setPassword(userEditPasswordForm.getPassword()); // パスワードは暗号化して保存する必要がある
-        userService.updateUser(user);  // ここでパスワードを保存
-
-        redirectAttributes.addFlashAttribute("successMessage", "パスワードが更新されました。");
-
-        return "redirect:/user";  // 更新後にリダイレクト
-    }
 }

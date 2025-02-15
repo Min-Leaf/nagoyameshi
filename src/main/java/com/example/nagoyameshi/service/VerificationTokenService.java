@@ -19,24 +19,37 @@ public class VerificationTokenService {
    @Transactional
    public void createVerificationToken(User user, String token) {
        VerificationToken verificationToken = new VerificationToken();
-
        verificationToken.setUser(user);
        verificationToken.setToken(token);
-
        verificationTokenRepository.save(verificationToken);
    }
-   
-   // パスワード認証
-	@Transactional
-	public void updateVerificationToken(User user, String token) {
-		VerificationToken verificationToken = new VerificationToken();
-		verificationToken.setToken(token);
-		
-		verificationTokenRepository.save(verificationToken);
-	}
 
    // トークンの文字列で検索した結果を返す
    public VerificationToken findVerificationTokenByToken(String token) {
        return verificationTokenRepository.findByToken(token);
+   }
+   
+   // パスワード再設定の追加
+   @Transactional
+   public void update(VerificationToken token) {
+       verificationTokenRepository.save(token);
+   }
+
+   // ユーザーIDとトークンに基づいてトークンを作成または更新するメソッドを追加
+   @Transactional
+   public void createOrUpdateVerificationToken(User user, String token) {
+       VerificationToken existingToken = verificationTokenRepository.findByUserId(user.getId());
+
+       if (existingToken != null) {
+           // 既存トークンがあれば更新
+           existingToken.setToken(token);
+           verificationTokenRepository.save(existingToken);
+       } else {
+           // 新規作成
+           VerificationToken newToken = new VerificationToken();
+           newToken.setUser(user);
+           newToken.setToken(token);
+           verificationTokenRepository.save(newToken);
+       }
    }
 }

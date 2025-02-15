@@ -3,25 +3,22 @@
     <head>
         <div th:replace="~{fragment :: meta}"></div>
         <div th:replace="~{fragment :: styles}"></div>
-        
         <title>パスワード再設定</title>
     </head>
     <body>
         <div class="nagoyameshi-wrapper">
-			<div th:replace="~{fragment :: header}"></div>
+            <div th:replace="~{fragment :: header}"></div>
+            
             <main>
-				<div class="container pt-4 pb-5 nagoyameshi-container">
-				                   <div class="row justify-content-center">
-				                       <div class="col-xl-5 col-lg-6 col-md-8">
-				                           <h1 class="mb-4 text-center">パスワードの再設定</h1>
-
-				                           <hr class="mb-4">
-
-				                           <div class="text-center">
-											メールアドレスの認証が確認できました。<br>
-											新しいパスワードを入力してください。
-				                           </div>
-                            </div>  
+                <div class="container pt-4 pb-5 nagoyameshi-container">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-5 col-lg-6 col-md-8">
+                            <h1 class="mb-4 text-center">パスワードの再設定</h1>
+                            <hr class="mb-4">
+                            <div class="text-center">
+                                メールアドレスの認証が確認できました。<br>
+                                新しいパスワードを入力してください。<br><br><br>
+                            </div>
 
                             <form method="post" th:action="@{/password/reset}" th:object="${passwordResetForm}">
                                 <!-- ユーザーIDを隠しフィールドとして送信 -->

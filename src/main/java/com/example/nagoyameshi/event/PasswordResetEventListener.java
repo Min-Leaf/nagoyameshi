@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.service.VerificationTokenService;
 
-// パスワード変更の機能
+// パスワード再設定の追加
 @Component
 public class PasswordResetEventListener {
 	private final VerificationTokenService verificationTokenService;
@@ -23,21 +23,23 @@ public class PasswordResetEventListener {
 		
 	@EventListener
 	private void onPasswordResetEvent(PasswordResetEvent passwordResetEvent) {
-		User user = passwordResetEvent.getUser();
-		String token = UUID.randomUUID().toString();
-		verificationTokenService.updateVerificationToken(user, token);
-		
-		String recipientAddress = user.getEmail();
-		String subject = "パスワードリセット";
-		String confirmationUrl = passwordResetEvent.getRequestUrl() + "/verify?token=" + token;
-		String message = "新しいパスワードを入力してください。";
-		
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo(recipientAddress);
-		mailMessage.setSubject(subject);
-		mailMessage.setText(message + "\n" + confirmationUrl);
-		javaMailSender.send(mailMessage);
-	}			
+	    User user = passwordResetEvent.getUser();
+	    String token = UUID.randomUUID().toString();
+
+	    // トークンを作成または更新
+	    verificationTokenService.createOrUpdateVerificationToken(user, token);
+
+	    // メール送信処理
+	    String recipientAddress = user.getEmail();
+	    String subject = "パスワードリセット";
+	    String confirmationUrl = passwordResetEvent.getRequestUrl() + "/verify?token=" + token;
+	    String message = "以下のリンクをクリックして新しいパスワードを入力してください。";
+
+	    SimpleMailMessage mailMessage = new SimpleMailMessage();
+	    mailMessage.setTo(recipientAddress);
+	    mailMessage.setSubject(subject);
+	    mailMessage.setText(message + "\n" + confirmationUrl);
+	    javaMailSender.send(mailMessage);
+	}
 	
 }
-
