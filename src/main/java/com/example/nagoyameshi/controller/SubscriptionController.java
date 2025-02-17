@@ -3,11 +3,15 @@ package com.example.nagoyameshi.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -16,10 +20,14 @@ import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.StripeService;
 import com.example.nagoyameshi.service.UserService;
+import com.stripe.Stripe;
+import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
+import com.stripe.model.Event;
 import com.stripe.model.PaymentMethod;
 import com.stripe.model.Subscription;
+import com.stripe.net.Webhook;
 
 // 会員の有料プラン
 @Controller
@@ -27,6 +35,10 @@ import com.stripe.model.Subscription;
 public class SubscriptionController {
    @Value("${stripe.premium-plan-price-id}")
    private String premiumPlanPriceId;
+   
+   // Herokuデプロイ用
+	@Value("${stripe.webhook-secret}")
+	private String webhookSecret;
 
    private final UserService userService;
    private final StripeService stripeService;
@@ -169,4 +181,19 @@ public class SubscriptionController {
 
        return "redirect:/";
    }
+   
+   
+   // Herokuデプロイ用
+	@PostMapping("/stripe/webhook")
+	public ResponseEntity<String> webhook(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader){
+		Stripe.apiKey = premiumPlanPriceId;
+		Event event = null;
+		
+		try {
+			event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
+		}catch (SignatureVerificationException e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+		return new ResponseEntity<>("Success", HttpStatus.OK);
+	}
 }

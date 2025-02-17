@@ -24,6 +24,10 @@ import com.stripe.param.SubscriptionListParams;
 public class StripeService {
    @Value("${stripe.api-key}")
    private String stripeApiKey;
+   
+   // Herokuデプロイ用
+   @Value("${stripe.webhook-secret}")
+	private String webhookSecret;
 
    // 依存性の注入後に一度だけ実行するメソッド
    @PostConstruct
