@@ -89,6 +89,16 @@
   - ロール別のアクセス制限
   - フォーム入力時のバリデーション
 
-## 3. 画面動画
+## 3. WebアプリのURL
 
-- 本リポジトリ内（または外部サイト）にデモ動画を準備し、以下のように埋め込む予定です。
+- https://springboot-tabelog-094ad39eb139.herokuapp.com/
+- 管理者用のメールアドレス：hanako.samurai@example.com
+- 無料会員用のメールアドレス：taro.samurai@example.com
+- 有料会員用のメールアドレス：jiro.samurai@example.com
+- 共通のパスワード：password
+
+- 要件定義書
+  https://docs.google.com/document/d/10GpxSOC7TrZSMqXxjmzvBCPtuTRFLs8_pJMANpr74s0/edit?usp=drive_link
+
+- アプリのレビュー評価
+  https://docs.google.com/spreadsheets/d/1G4vR_0WXvkTdI9ssfmdN-iBmYYcsVZ6OUD5cat7KZN8/edit?usp=drive_link
